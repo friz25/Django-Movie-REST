@@ -51,3 +51,8 @@ if settings.DEBUG:
 
 ## Видеоинструкция по переносу неREST проэкта сюда
 https://www.youtube.com/watch?v=1DIDlsvv8cg&list=PLF-NY6ldwAWqSxUpnTBObEP21cFQxNJ7C&index=3
+
+## * как изменить порт по умолчанию с 8000 на 80001
+открываем `C:\Django\dm_rest\venv\Lib\site-packages\django\core\management\commands`
+
+файл `runserver.py` изменить 8000 на 80001
