@@ -49,3 +49,5 @@ if settings.DEBUG:
 Зайдём на `http://127.0.0.1:8000/api-auth/login/`
 Зайдём на `http://127.0.0.1:8000/admin/`
 
+## Видеоинструкция по переносу неREST проэкта сюда
+https://www.youtube.com/watch?v=1DIDlsvv8cg&list=PLF-NY6ldwAWqSxUpnTBObEP21cFQxNJ7C&index=3
