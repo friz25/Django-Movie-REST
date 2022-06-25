@@ -8,10 +8,11 @@ from .models import Movie, Review, Rating
 
 class MovieListSerializer(serializers.ModelSerializer):
     """ Список фильмов """
+    rating_user = serializers.BooleanField()
 
     class Meta:
         model = Movie
-        fields = ("title", "tagline", "category")
+        fields = ("id", "title", "tagline", "category", "rating_user")
 
 class FilterReviewListSerializer(serializers.ListSerializer):
     """ Фильтр комментов, только parents """
