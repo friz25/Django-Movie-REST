@@ -3,16 +3,17 @@
 """
 from rest_framework import serializers
 
-from .models import Movie, Review, Rating
+from .models import Movie, Review, Rating, Actor
 
 
 class MovieListSerializer(serializers.ModelSerializer):
     """ Список фильмов """
     rating_user = serializers.BooleanField()
+    middle_star = serializers.IntegerField()
 
     class Meta:
         model = Movie
-        fields = ("id", "title", "tagline", "category", "rating_user")
+        fields = ("id", "title", "tagline", "category", "rating_user", "middle_star")
 
 class FilterReviewListSerializer(serializers.ListSerializer):
     """ Фильтр комментов, только parents """
@@ -25,6 +26,18 @@ class RecursiveSerializer(serializers.ModelSerializer):
     def to_representation(self, value):
         serializer = self.parent.parent.__class__(value, context=self.context)
         return serializer.data
+
+class ActorListSelializer(serializers.ModelSerializer):
+    """ Вывод списка актёров и режжисёров [8] """
+    class Meta:
+        model = Actor
+        fields = ("id", "name", "image")
+
+class ActorDetailSelializer(serializers.ModelSerializer):
+    """ Вывод полного описания актёра и режжисёра [8] """
+    class Meta:
+        model = Actor
+        fields = "__all__"
 
 class ReviewCreateSerializer(serializers.ModelSerializer):
     """[POST] Добавление комментария (к фильму) """
@@ -45,8 +58,8 @@ class ReviewSerializer(serializers.ModelSerializer):
 class MovieDetailSerializer(serializers.ModelSerializer):
     """ Полный фильмов """
     category = serializers.SlugRelatedField(slug_field="name", read_only=True)
-    directors = serializers.SlugRelatedField(slug_field="name", read_only=True, many=True)
-    actors = serializers.SlugRelatedField(slug_field="name", read_only=True, many=True)
+    directors = ActorListSelializer(read_only=True, many=True)
+    actors = ActorListSelializer(read_only=True, many=True)
     genres = serializers.SlugRelatedField(slug_field="name", read_only=True, many=True)
     reviews = ReviewSerializer(many=True)
 

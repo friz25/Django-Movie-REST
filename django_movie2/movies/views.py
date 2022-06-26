@@ -1,20 +1,26 @@
 from django.db import models #дописали v6
+from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Movie
-from .serializers import MovieListSerializer, MovieDetailSerializer, ReviewCreateSerializer, CreateRatingSerializer
+from .models import Movie, Actor
+from .serializers import (
+    MovieListSerializer,
+    MovieDetailSerializer,
+    ReviewCreateSerializer,
+    CreateRatingSerializer,
+    ActorListSelializer,
+    ActorDetailSelializer
+)
 from .service import get_client_ip
 
 class MovieListView(APIView):
     """ [GET] Вывод списка фильмов"""
     def get(self, request):
         movies = Movie.objects.filter(draft=False).annotate(
-            rating_user=models.Case(
-                models.When(ratings__ip=get_client_ip(request), then=True),
-                    default=False,
-                    output_field=models.BooleanField()
-            ),
+            rating_user=models.Count("ratings", filter=models.Q(ratings__ip=get_client_ip(request)))
+        ).annotate(
+            middle_star=models.Sum(models.F('ratings__star')) / models.Count(models.F('ratings'))
         )
         serializer = MovieListSerializer(movies, many=True)
         return Response(serializer.data)
@@ -45,3 +51,12 @@ class AddStarRatingView(APIView):
         else:
             return Response(status=400)
 
+class ActorsListView(generics.ListAPIView):
+    """ Вывод списка актёров [8] """
+    queryset = Actor.objects.all()
+    serializer_class = ActorListSelializer
+
+class ActorsDetailView(generics.RetrieveAPIView):
+    """ Вывод полного описания актёра / режжисёра [8] """
+    queryset = Actor.objects.all()
+    serializer_class = ActorDetailSelializer
