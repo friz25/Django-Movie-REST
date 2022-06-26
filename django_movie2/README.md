@@ -77,6 +77,7 @@ pip install drf-yasg
 http://127.0.0.1:8001/swagger/
 
 ## Добавление cors
+*cors это для безопасности AJAX запросов <br>
 Данная библиотека нам позволит добавлять к ответам заголовки Cross-Origin Resource Sharing (CORS). Это позволяет запросы в браузере к вашему приложению Django из других источников.
 
     pip install django-cors-headers 
