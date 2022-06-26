@@ -1,7 +1,7 @@
-from django.db import models #дописали v6
+from django.db import models #дописали [6]
 from rest_framework import generics
-from rest_framework.response import Response
-from rest_framework.views import APIView
+# from rest_framework.response import Response # удалили [9]
+# from rest_framework.views import APIView # удалили [9]
 
 from .models import Movie, Actor
 from .serializers import (
@@ -14,24 +14,31 @@ from .serializers import (
 )
 from .service import get_client_ip
 
-class MovieListView(APIView):
-    """ [GET] Вывод списка фильмов"""
-    def get(self, request):
+class MovieListView(generics.ListAPIView):
+    """ [GET] Вывод списка фильмов [9]"""
+    serializer_class = MovieListSerializer
+
+    def get_queryset(self):
         movies = Movie.objects.filter(draft=False).annotate(
-            rating_user=models.Count("ratings", filter=models.Q(ratings__ip=get_client_ip(request)))
+            rating_user=models.Count("ratings", filter=models.Q(ratings__ip=get_client_ip(self.request)))
         ).annotate(
             middle_star=models.Sum(models.F('ratings__star')) / models.Count(models.F('ratings'))
         )
-        serializer = MovieListSerializer(movies, many=True)
-        return Response(serializer.data)
+        return movies
 
+'''
 class MovieDetailView(APIView):
-    """ [GET] Вывод фильма"""
+    """ [GET] Вывод фильма """
     def get(self, request, pk):
         movie = Movie.objects.get(id=pk, draft=False)
         serializer = MovieDetailSerializer(movie)
         return Response(serializer.data)
-
+'''
+class MovieDetailView(generics.RetrieveAPIView):
+    """ [GET] Вывод фильма [9]"""
+    queryset = Movie.objects.filter(draft=False)
+    serializer_class = MovieDetailSerializer
+'''
 class ReviewCreateView(APIView):
     """ [POST] Добавление комментария (к фильму) """
     def post(self, request):
@@ -39,7 +46,11 @@ class ReviewCreateView(APIView):
         if review.is_valid():
             review.save()
         return Response(status=201)
-
+'''
+class ReviewCreateView(generics.CreateAPIView):
+    """ [POST] Добавление комментария (к фильму) [9]"""
+    serializer_class = ReviewCreateSerializer
+'''
 class AddStarRatingView(APIView):
     """[POST] Добавление рейтинга фильму """
 
@@ -50,6 +61,14 @@ class AddStarRatingView(APIView):
             return Response(status=201)
         else:
             return Response(status=400)
+'''
+class AddStarRatingView(generics.CreateAPIView):
+    """[POST] Добавление рейтинга фильму """
+    serializer_class = CreateRatingSerializer
+
+    def perform_create(self, serializer):
+        """ возвращает IP пользователя """
+        serializer.save(ip=get_client_ip(self.request))
 
 class ActorsListView(generics.ListAPIView):
     """ Вывод списка актёров [8] """
