@@ -1,5 +1,5 @@
 from django.db import models #дописали [6]
-from rest_framework import generics
+from rest_framework import generics, permissions
 # from rest_framework.response import Response # удалили [9]
 # from rest_framework.views import APIView # удалили [9]
 from django_filters.rest_framework import DjangoFilterBackend
@@ -16,10 +16,11 @@ from .serializers import (
 from .service import get_client_ip, MovieFilter
 
 class MovieListView(generics.ListAPIView):
-    """ [GET] Вывод списка фильмов [10]"""
+    """ [GET] Вывод списка фильмов [11]"""
     serializer_class = MovieListSerializer
     filter_backends = (DjangoFilterBackend,) #подключили фильт django
     filterset_class = MovieFilter # http://127.0.0.1:8001/api/v1/movie/?year_min=1983&year_max=2022&genres=Боевик
+    permission_classes = [permissions.IsAuthenticated] # [12]
 
     def get_queryset(self):
         movies = Movie.objects.filter(draft=False).annotate(

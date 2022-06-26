@@ -1,4 +1,4 @@
-# Создание Django REST framework проэкта
+# 1) Создание Django REST framework проэкта
 создадим venv
 зайдём в виртуальное окружение `python -m venv venv`
 
@@ -49,10 +49,25 @@ if settings.DEBUG:
 Зайдём на `http://127.0.0.1:8000/api-auth/login/`
 Зайдём на `http://127.0.0.1:8000/admin/`
 
-## Видеоинструкция по переносу неREST проэкта сюда
+# 2) Видеоинструкция по переносу неREST проэкта сюда
 https://www.youtube.com/watch?v=1DIDlsvv8cg&list=PLF-NY6ldwAWqSxUpnTBObEP21cFQxNJ7C&index=3
 
 ## * как изменить порт по умолчанию с 8000 на 80001
 открываем `C:\Django\dm_rest\venv\Lib\site-packages\django\core\management\commands`
 
 файл `runserver.py` изменить 8000 на 80001
+
+# 3) Сериализация
+`serializers.py`
+`views.py`
+`movies/urls.py`
+фильтр фильмов (по годам и жанрам):
+`pip install django-filter`
+авторизация (обычные токены и JWT):
+`pip install djoser`
+`pip install djangorestframework_simplejwt`
+прописать в `settings` и `urls`
+сделать миграции
+
+далее postman
+http://127.0.0.1:8001/auth/token/login/
