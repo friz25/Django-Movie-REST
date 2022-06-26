@@ -2,6 +2,7 @@ from django.db import models #дописали [6]
 from rest_framework import generics
 # from rest_framework.response import Response # удалили [9]
 # from rest_framework.views import APIView # удалили [9]
+from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import Movie, Actor
 from .serializers import (
@@ -12,11 +13,13 @@ from .serializers import (
     ActorListSelializer,
     ActorDetailSelializer
 )
-from .service import get_client_ip
+from .service import get_client_ip, MovieFilter
 
 class MovieListView(generics.ListAPIView):
-    """ [GET] Вывод списка фильмов [9]"""
+    """ [GET] Вывод списка фильмов [10]"""
     serializer_class = MovieListSerializer
+    filter_backends = (DjangoFilterBackend,) #подключили фильт django
+    filterset_class = MovieFilter # http://127.0.0.1:8001/api/v1/movie/?year_min=1983&year_max=2022&genres=Боевик
 
     def get_queryset(self):
         movies = Movie.objects.filter(draft=False).annotate(
