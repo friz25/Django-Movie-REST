@@ -74,4 +74,21 @@ http://127.0.0.1:8001/auth/token/login/
 # АвтоДокументирование API
 pip install drf-yasg
 прописать в `settings`
-url='http://127.0.0.1:8001/',
+http://127.0.0.1:8001/swagger/
+
+## Добавление cors
+Данная библиотека нам позволит добавлять к ответам заголовки Cross-Origin Resource Sharing (CORS). Это позволяет запросы в браузере к вашему приложению Django из других источников.
+
+    pip install django-cors-headers 
+прописать в `settings` <br>
+в INSTALLED_APPS <br>
+`'corsheaders',` <br>
+в MIDDLEWARE <br>
+`'corsheaders.middleware.CorsMiddleware',` <br>
+внизу settings добавим настройку <br>
+```python
+CORS_ORIGIN_WHITELIST = [
+    "http://localhost:8080",
+    "http://127.0.0.1:8001",
+]
+```

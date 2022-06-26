@@ -47,13 +47,14 @@ INSTALLED_APPS = [
     'djoser',
     'drf_yasg',
     'django_filters',
-
+    'corsheaders',
     'movies',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -155,6 +156,10 @@ print(f'{MEDIA_ROOT=}')
 STATIC_DIR='C:\\Django\\dm_rest\\django_movie2\\static'
 MEDIA_ROOT='C:\\Django\\dm_rest\\django_movie2\\media'
 
+CORS_ORIGIN_WHITELIST = [
+    "http://localhost:8080",
+    "http://127.0.0.1:8001",
+]
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
