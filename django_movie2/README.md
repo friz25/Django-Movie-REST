@@ -71,3 +71,7 @@ https://www.youtube.com/watch?v=1DIDlsvv8cg&list=PLF-NY6ldwAWqSxUpnTBObEP21cFQxN
 
 далее postman
 http://127.0.0.1:8001/auth/token/login/
+# АвтоДокументирование API
+pip install drf-yasg
+прописать в `settings`
+url='http://127.0.0.1:8001/',
